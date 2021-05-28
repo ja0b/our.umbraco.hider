@@ -1,0 +1,5 @@
+﻿{
+  "javascript": [
+    "~/App_Plugins/UmbracoHider/backoffice/umbraco.hider.backoffice.interceptors.js"
+  ]
+}

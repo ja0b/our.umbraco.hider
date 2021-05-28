@@ -1,0 +1,47 @@
+﻿<div id="umbracoHider" ng-controller="Umbraco.Hider.Dashboard.Controller as umbracoHiderDashboardController">
+
+    <div ng-if="umbracoHiderDashboardController.dashboard.actionInProgress">
+        <umb-load-indicator></umb-load-indicator>
+    </div>
+
+    <div class="umb-panel-group__details-group">
+        <div class="umb-panel-group__details-group-title">
+            <div class="umb-panel-group__details-group-name">
+                Umbraco Hider
+            </div>
+        </div>
+        <div class="umb-panel-group__details-checks">
+            <div class="umb-panel-group__details-check">
+                <div class="umb-panel-group__details-status">
+                    <div class="umb-panel-group__details-status-content">
+
+                        <table class="table table-striped table-responsive table-bordered dtgTable">
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="column in umbracoHiderDashboardController.dashboard.columnsData.columns">{{column.title}}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody ui-sortable="umbracoHiderDashboardController.dashboard.sortableOptions" ng-model="umbracoHiderDashboardController.dashboard.rules">
+                                <tr ng-repeat="row in umbracoHiderDashboardController.dashboard.rules">
+                                    <td ng-repeat="property in umbracoHiderDashboardController.dashboard.propertiesOrder">
+                                        <ng-include src="'../App_Plugins/UmbracoHider/dashboard/views/' + umbracoHiderDashboardController.dashboard.columnsData.columns[$index].type + '.html'"></ng-include>
+                                    </td>
+                                    <td class="actions">
+                                        <span class="btn btn-default icon icon-height sortHandle"></span>
+                                        <span ng-click="umbracoHiderDashboardController.dashboard.removeRule($index)" class="btn btn-danger icon icon-trash"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="button" class="btn btn-add" ng-click="umbracoHiderDashboardController.dashboard.addRule()">Add rule</button>
+                        <button type="button" data-hotkey="ctrl+s" class="btn btn-success" ng-disabled="umbracoHiderDashboardController.dashboard.actionInProgress" ng-click="umbracoHiderDashboardController.dashboard.saveRules()">
+                            <localize key="buttons_save">Save</localize>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

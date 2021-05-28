@@ -1,0 +1,56 @@
+﻿.dtgTable tr td.actions span {
+    padding: 2px 4px;
+}
+
+    .dtgTable tr td.actions span.sortHandle {
+        cursor: move;
+    }
+
+.dtgTable .umb-sortable-thumbnails li {
+    width: 80px !important;
+    height: 66px !important;
+}
+
+.dtgTable .list-icons li {
+    padding-left: 25px;
+}
+
+    .dtgTable .list-icons li > i.icon {
+        display: none;
+    }
+
+.dtgTable input, .dtgTable textarea {
+    width: 90%;
+}
+
+.dtgTable select {
+    max-width: 180px;
+}
+
+.umb-bottom-bar {
+    z-index: 1040;
+}
+
+.btn-add {
+    float: right;
+}
+
+.sortHandle {
+    font-size: 18px;
+}
+
+.show-tabs > li {
+    display: block !important;
+}
+
+.show-controls {
+    display: block !important;
+}
+
+.hidden-tab {
+    display: none !important;
+}
+
+.hidden-button {
+    display: none !important;
+}

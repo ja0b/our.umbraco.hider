@@ -1,0 +1,3 @@
+﻿<select ng-model="row[property]" class="umb-textstring textstring" ng-options="opt.value as opt.text for opt in umbracoHiderDashboardController.dashboard.columnsData.columns[$index].props.options" no-dirty-check></select>
+<br />
+<button ng-show="row[property]" type="button" class="btn btn-default btn-link" ng-click="row[property] = ''"><span class="icon icon-delete"></span> Clear selection</button>

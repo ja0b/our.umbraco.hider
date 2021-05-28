@@ -1,0 +1,17 @@
+﻿{
+  "dashboards": [
+    {
+      "alias": "umbracoHider",
+      "view": "~/App_Plugins/UmbracoHider/dashboard/views/umbraco.hider.dashboard.html",
+      "sections": [ "settings" ],
+      "weight": 80
+    }
+  ],
+  "javascript": [
+    "~/App_Plugins/UmbracoHider/dashboard/controllers/umbraco.hider.dashboard.controller.js",
+    "~/App_Plugins/UmbracoHider/dashboard/resources/umbraco.hider.resources.js"
+  ],
+  "css": [
+    "~/App_Plugins/UmbracoHider/dashboard/css/styles.css"
+  ]
+}
