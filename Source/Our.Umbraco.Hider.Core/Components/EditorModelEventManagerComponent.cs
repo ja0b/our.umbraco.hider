@@ -2,13 +2,11 @@
 using Our.Umbraco.Hider.Core.Extensions;
 using Our.Umbraco.Hider.Core.Models;
 using Our.Umbraco.Hider.Core.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Filters;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
-using Umbraco.Core.Logging;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Models.ContentEditing;
 
@@ -17,12 +15,10 @@ namespace Our.Umbraco.Hider.Core.Components
     public class EditorModelEventManagerComponent : IComponent
     {
         private readonly IConfigurationService _configurationService;
-        private readonly ILogger _logger;
 
-        public EditorModelEventManagerComponent(IConfigurationService configurationService, ILogger logger)
+        public EditorModelEventManagerComponent(IConfigurationService configurationService)
         {
             _configurationService = configurationService;
-            _logger = logger;
         }
 
         public void Initialize()
@@ -38,38 +34,22 @@ namespace Our.Umbraco.Hider.Core.Components
         private void EditorModelEventManagerOnSendingContentModel(HttpActionExecutedContext sender, EditorModelEventArgs<ContentItemDisplay> e)
         {
             var contentItemDisplay = e.Model;
-            var umbracoContext = e.UmbracoContext;
+            var rules = _configurationService.GetRules();
 
-            var user = umbracoContext.Security.CurrentUser;
-            var rules = _configurationService.GetRulesForUser(user);
+            if (!rules.Any()) { return; }
 
-            ProcessRules(contentItemDisplay, rules);
+            HiddenItems(contentItemDisplay, rules);
         }
 
-        private void ProcessRules(ContentItemDisplay contentItemDisplay, IEnumerable<Rule> rules)
+        private static void HiddenItems(ContentItemDisplay contentItemDisplay, IEnumerable<Rule> rules)
         {
-            try
-            {
-                rules = rules.Where(rule =>
-                        (string.IsNullOrWhiteSpace(rule.ContentTypes) || rule.ContentTypes.ToDelimitedList().InvariantContains(contentItemDisplay.ContentTypeAlias))
-                        && (string.IsNullOrWhiteSpace(rule.ContentIds) || rule.ContentIds.ToDelimitedList().InvariantContains(contentItemDisplay.Id.ToString()))
-                        && (string.IsNullOrWhiteSpace(rule.ParentContentIds) || rule.ParentContentIds.ToDelimitedList().InvariantContains(contentItemDisplay.ParentId.ToString())))
-                    .ToList();
+            HideProperties(contentItemDisplay, rules);
 
-                if (!rules.Any()) { return; }
+            HideTabs(contentItemDisplay, rules);
 
-                HideProperties(contentItemDisplay, rules);
+            HideButtons(contentItemDisplay, rules);
 
-                HideTabs(contentItemDisplay, rules);
-
-                HideButtons(contentItemDisplay, rules);
-
-                HideContentApps(contentItemDisplay, rules);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error<EditorModelEventManagerComponent>("Error processing rules.", ex);
-            }
+            HideContentApps(contentItemDisplay, rules);
         }
 
         private static void HideButtons(ContentItemDisplay contentItemDisplay, IEnumerable<Rule> rules)

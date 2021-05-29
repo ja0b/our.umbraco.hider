@@ -27,8 +27,8 @@
                 { Rules: configContent });
         }
 
-        function getActionsButtonRule() {
-            return $http.get(API_ROOT + 'IsActionsButtonHidden');
+        function getActionsButtonRule(currentPageId) {
+            return $http.post(API_ROOT + 'IsActionsButtonHidden/?currentPageId=' + currentPageId);
         }
     }
 })();

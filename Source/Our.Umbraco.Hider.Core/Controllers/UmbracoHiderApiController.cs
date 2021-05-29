@@ -31,10 +31,10 @@ namespace Our.Umbraco.Hider.Core.Controllers
             return configurationFile;
         }
 
-        [HttpGet]
-        public bool IsActionsButtonHidden()
+        [HttpPost]
+        public bool IsActionsButtonHidden([FromUri] int currentPageId)
         {
-            var isActionsButtonHidden = _configurationService.IsActionsButtonHidden();
+            var isActionsButtonHidden = _configurationService.IsActionsButtonHidden(currentPageId);
             return isActionsButtonHidden;
         }
     }

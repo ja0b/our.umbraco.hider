@@ -10,20 +10,19 @@ using System.Web;
 using System.Web.Caching;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models.Membership;
 using Umbraco.Web;
 
 namespace Our.Umbraco.Hider.Core.Services
 {
     public interface IConfigurationService
     {
-        IEnumerable<Rule> GetRulesForUser(IUser user);
+        IEnumerable<Rule> GetRules(int currentPageId = 0);
 
         UmbracoHiderConfigModel LoadConfigurationFile();
 
         UmbracoHiderConfigModel SaveConfigurationFile(UmbracoHiderConfigModel configurationFile);
 
-        bool IsActionsButtonHidden();
+        bool IsActionsButtonHidden(int currentPageId);
     }
 
     public class ConfigurationService : IConfigurationService
@@ -37,37 +36,21 @@ namespace Our.Umbraco.Hider.Core.Services
             _umbracoContextFactory = umbracoContextFactory;
         }
 
-        public IEnumerable<Rule> GetRulesForUser(IUser user)
+        public IEnumerable<Rule> GetRules(int currentPageId = 0)
         {
-            var result = new List<Rule>();
-
-            if (user == null) { return result; }
-
-            var currentUsername = user.Username.ToLower();
-            var currentUserGroups = user.Groups.ToList();
-
             // If the current user is admin then omit all rules
-            if (currentUserGroups.Any(x => x.Alias.Equals("administrators", StringComparison.InvariantCultureIgnoreCase)))
-            {
-                return result;
-            }
+            //if (currentUserGroups.Any(x => x.Alias.Equals("admin", StringComparison.InvariantCultureIgnoreCase)))
+            //{
+            //    return result;
+            //}
 
             // Get rules from the cache
             var configurationFile = HttpContext.Current.Cache.Get(ApplicationConstants.CacheKeys.ConfigurationFile) as UmbracoHiderConfigModel
                                     ?? LoadConfigurationFile();
 
-            // Filter rules to apply for the current user
-            result = configurationFile.Rules.Where(x =>
-                string.IsNullOrWhiteSpace(x.Users) && string.IsNullOrWhiteSpace(x.UserGroups)
-                || !string.IsNullOrWhiteSpace(x.Users) && string.IsNullOrWhiteSpace(x.UserGroups) && x.Users.ToLower().ToDelimitedList().Contains(currentUsername)
-                || string.IsNullOrWhiteSpace(x.UserGroups) && !string.IsNullOrWhiteSpace(x.UserGroups) && x.UserGroups.ToLower().ToDelimitedList().Contains(currentUserGroups.FirstOrDefault()?.Alias)
-                || x.Users.ToLower().ToDelimitedList().Contains(currentUsername) || x.UserGroups.ToLower().ToDelimitedList().Contains(currentUserGroups.FirstOrDefault()?.Alias)
+            var processedRules = ProcessRules(configurationFile.Rules, currentPageId);
 
-            ).ToList();
-
-            result = result.Where(rule => rule.Enabled).ToList();
-
-            return result;
+            return processedRules;
         }
 
         public UmbracoHiderConfigModel LoadConfigurationFile()
@@ -129,33 +112,62 @@ namespace Our.Umbraco.Hider.Core.Services
             return null;
         }
 
-        public bool IsActionsButtonHidden()
+        public bool IsActionsButtonHidden(int currentPageId)
         {
             var hideButtons = new List<string>();
+            var rules = GetRules(currentPageId);
+            var buttonRules = rules.Where(r => r.Type.InvariantEquals(ApplicationConstants.RuleType.HideButtons) && !string.IsNullOrWhiteSpace(r.Names));
 
-            using (var umbracoContext = _umbracoContextFactory.EnsureUmbracoContext())
+            foreach (var buttonRule in buttonRules)
             {
-                var user = umbracoContext.UmbracoContext.Security.CurrentUser;
-
-                var rules = GetRulesForUser(user);
-
-                //var g = umbracoContext.UmbracoContext.PublishedRequest.PublishedContent;
-
-                //rules = rules.Where(rule =>
-                //        (string.IsNullOrWhiteSpace(rule.ContentTypes) || rule.ContentTypes.ToDelimitedList().InvariantContains(g.ContentType.Alias))
-                //        && (string.IsNullOrWhiteSpace(rule.ContentIds) || rule.ContentIds.ToDelimitedList().InvariantContains(g.Id.ToString()))
-                //        && (string.IsNullOrWhiteSpace(rule.ParentContentIds) || rule.ParentContentIds.ToDelimitedList().InvariantContains(g.Parent.Id.ToString())))
-                //    .ToList();
-
-                var buttonRules = rules.Where(r => r.Type.InvariantEquals(ApplicationConstants.RuleType.HideButtons) && !string.IsNullOrWhiteSpace(r.Names));
-
-                foreach (var buttonRule in buttonRules)
-                {
-                    hideButtons.AddRangeUnique(buttonRule.Names.ToDelimitedList().ToList());
-                }
+                hideButtons.AddRangeUnique(buttonRule.Names.ToDelimitedList().ToList());
             }
 
             return hideButtons.Contains("actions");
+        }
+
+        private IEnumerable<Rule> ProcessRules(IEnumerable<Rule> rules, int currentPageId = 0)
+        {
+            var result = new List<Rule>();
+
+            using (var umbracoContextFactory = _umbracoContextFactory.EnsureUmbracoContext())
+            {
+                var user = umbracoContextFactory.UmbracoContext.Security.CurrentUser;
+                if (user == null) { return result; }
+
+                if (currentPageId.Equals(0))
+                {
+                    currentPageId = int.TryParse(umbracoContextFactory.UmbracoContext.HttpContext.Request.QueryString["id"], out currentPageId)
+                        ? currentPageId
+                        : 0;
+                }
+
+                if (currentPageId.Equals(0)) { return result; }
+
+                var currentNode = umbracoContextFactory.UmbracoContext.Content.GetById(currentPageId);
+                var currentUsername = user.Username.ToLower();
+                var currentUserGroups = user.Groups.ToList();
+
+                //Get enabled rules
+                result = rules.Where(x => x.Enabled).ToList();
+
+                //Filter rules to apply for the current user
+                result = result.Where(x =>
+                    string.IsNullOrWhiteSpace(x.Users) && string.IsNullOrWhiteSpace(x.UserGroups)
+                    || !string.IsNullOrWhiteSpace(x.Users) && string.IsNullOrWhiteSpace(x.UserGroups) && x.Users.ToLower().ToDelimitedList().Contains(currentUsername)
+                    || string.IsNullOrWhiteSpace(x.UserGroups) && !string.IsNullOrWhiteSpace(x.UserGroups) && x.UserGroups.ToLower().ToDelimitedList().Contains(currentUserGroups.FirstOrDefault()?.Alias)
+                    || x.Users.ToLower().ToDelimitedList().Contains(currentUsername) || x.UserGroups.ToLower().ToDelimitedList().Contains(currentUserGroups.FirstOrDefault()?.Alias)
+                ).ToList();
+
+                //Filter rules to apply ids
+                result = result.Where(rule =>
+                        (string.IsNullOrWhiteSpace(rule.ContentTypes) || rule.ContentTypes.ToDelimitedList().InvariantContains(currentNode.ContentType.Alias))
+                        && (string.IsNullOrWhiteSpace(rule.ContentIds) || rule.ContentIds.ToDelimitedList().InvariantContains(currentNode.Id.ToString()))
+                        && (string.IsNullOrWhiteSpace(rule.ParentContentIds) || rule.ParentContentIds.ToDelimitedList().InvariantContains(currentNode.Parent.Id.ToString())))
+                    .ToList();
+            }
+
+            return result;
         }
 
         private static string GetConfigurationFilePath()

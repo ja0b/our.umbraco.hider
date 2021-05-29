@@ -2,7 +2,7 @@
   "Rules": [
     {
       "Type": "HideTabs",
-      "Enabled": false,
+      "Enabled": true,
       "Names": "Footer, Hero",
       "UserGroups": null,
       "Users": null,
