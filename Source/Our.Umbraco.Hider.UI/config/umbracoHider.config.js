@@ -2,7 +2,7 @@
   "Rules": [
     {
       "Type": "HideTabs",
-      "Enabled": true,
+      "Enabled": false,
       "Names": "Footer, Hero",
       "UserGroups": null,
       "Users": null,
@@ -24,8 +24,8 @@
     },
     {
       "Type": "HideButtons",
-      "Enabled": true,
-      "Names": "preview, save, actions",
+      "Enabled": false,
+      "Names": "preview, save, actions, publish",
       "UserGroups": null,
       "Users": null,
       "ContentIds": "1104",

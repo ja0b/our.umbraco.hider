@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+	<metadata>
+		<id>Our.Umbraco.Hider</id>
+		<version>$version$</version>
+		<title>Our.Umbraco.Hider</title>
+		<authors>ja0b</authors>
+		<owners>ja0b</owners>
+		<projectUrl>https://github.com/ja0b/our.umbraco.hider</projectUrl>
+		<repository type="git" url="https://github.com/ja0b/our.umbraco.hider" />
+		<license type="expression">MIT</license>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>This package makes it possible to create rules in the Umbraco backoffice to hide tabs, properties, buttons, content apps, for specific user names, groups, content ids, parent ids and content types.</description>
+		<icon>content\App_Plugins\UmbracoHider\dashboard\css\umbraco-hider.png</icon>
+		<copyright>Copyright 2021</copyright>
+		<tags>Umbraco UmbracoHider HideTabs HideProperties Hide Cogworks</tags>
+	</metadata>
+	<files>
+		<file src="..\Our.Umbraco.Hider.Core\bin\Release\**\Our.Umbraco.Hider.Core.dll" target="lib\net452" />
+		<file src="..\Our.Umbraco.Hider.Core\Config\**" target="content\Config" />
+		<file src="App_Plugins\UmbracoHider\**" target="content\App_Plugins\UmbracoHider" />
+	</files>
+</package>

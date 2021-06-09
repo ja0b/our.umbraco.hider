@@ -281,6 +281,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\UmbracoHider\backoffice\umbraco.hider.backoffice.interceptors.js" />
+    <Content Include="App_Plugins\UmbracoHider\dashboard\css\umbraco-hider.png" />
     <Content Include="App_Plugins\UmbracoHider\dashboard\lang\en-US.xml" />
     <Content Include="App_Plugins\UmbracoHider\dashboard\resources\umbraco.hider.resources.js" />
     <Content Include="App_Plugins\UmbracoHider\dashboard\controllers\umbraco.hider.dashboard.controller.js" />
@@ -332,6 +333,7 @@
     <Content Include="config\BackOfficeTours\getting-started.json" />
     <Content Include="App_Plugins\UmbracoHider\dashboard\package.manifest" />
     <Content Include="App_Plugins\UmbracoHider\backoffice\package.manifest" />
+    <Content Include="Our.Umbraco.Hider.nuspec" />
     <None Include="packages.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
