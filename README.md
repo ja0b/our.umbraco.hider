@@ -1,11 +1,14 @@
 
 # Umbraco Hider
 
+[![Travis build status](https://img.shields.io/travis/ja0b/our.umbraco.hider/master.svg?label=master)](https://api.travis-ci.org/ja0b/our.umbraco.hider.svg?branch=master&status=passed) [![NuGet release](https://img.shields.io/nuget/v/Our.Umbraco.Hider.svg)](https://www.nuget.org/packages/Our.Umbraco.Hider) [![NuGet](https://img.shields.io/nuget/dt/Our.Umbraco.Hider.svg)](https://www.nuget.org/packages/Our.Umbraco.Hider) [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.org/projects/backoffice-extensions/cogworks-examine-inspector) [![Umbraco version](https://img.shields.io/badge/umbraco->8.10.0-%233544b1)](https://github.com/ja0b/Our.Umbraco.Hider)
+
 This package makes it possible to create rules in the umbraco backoffice to hide (tabs, properties, buttons <<Including the actions button>> and content apps) for certain Users, User Groups, Content Ids, Parent Content Ids and/or Content Types.
 
 ## Getting Started 💫
 
-This package is supported on Umbraco 8.10+. (It may work for lower 8 versions but it has not been tested)
+This package is supported on Umbraco 8.10.0+.
+(It may work for lower 8 versions but it has not been tested)
 
 ## Installation 🎊
 
