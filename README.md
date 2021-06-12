@@ -24,10 +24,10 @@ To [install from NuGet](https://www.nuget.org/packages/Our.Umbraco.Hider/), you 
 After installing the package you will see new tab inside the setting dashboard to create your rules.
 
 Dashboard
-![UmbracoHider Dashboard](docs/img/UmbracoHider_1.JPG?raw=true)
+![UmbracoHider Dashboard](Docs/Img/UmbracoHider_1.JPG?raw=true)
 
 Rule Types
-![UmbracoHider Rule Types](docs/img/UmbracoHider_2.JPG?raw=true)
+![UmbracoHider Rule Types](Docs/Img/UmbracoHider_2.JPG?raw=true)
 
 ## Contribution guidelines ⛏
 
@@ -38,7 +38,7 @@ This package was built using https://our.umbraco.com/packages/collaboration/back
 
 Finally thanks to [Imran Haider](https://twitter.com/Jim_Randy) that without knowing gave his last name to name this package 😂.
 
-![UmbracoHider Name](docs/img/UmbracoHider_3.JPG?raw=true)
+![UmbracoHider Name](Docs/Img/UmbracoHider_3.JPG?raw=true)
 
 ## License 📜
 Licensed under the [MIT License](LICENSE)
