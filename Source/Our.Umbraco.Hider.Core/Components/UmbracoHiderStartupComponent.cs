@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Our.Umbraco.Hider.Core.Services;
+﻿using Our.Umbraco.Hider.Core.Services;
 using System.Net;
 using Umbraco.Core.Composing;
 
@@ -18,14 +16,6 @@ namespace Our.Umbraco.Hider.Core.Components
         public void Initialize()
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
-
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented
-            };
 
             // Load rules and create config file if it doesn't exist
             _configurationService.LoadConfigurationFile();
