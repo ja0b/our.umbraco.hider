@@ -14,9 +14,15 @@
 		<icon>content\App_Plugins\UmbracoHider\dashboard\css\umbraco-hider.png</icon>
 		<copyright>Copyright 2021</copyright>
 		<tags>Umbraco UmbracoHider HideTabs HideProperties Hide Cogworks</tags>
+		<dependencies>
+			<group targetFramework="net472">
+				<dependency id="UmbracoCms.Core" version="8.10.0" />
+				<dependency id="UmbracoCms.Web" version="8.10.0" />
+			</group>
+		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\Our.Umbraco.Hider.Core\bin\Release\**\Our.Umbraco.Hider.Core.dll" target="lib\net452" />
+		<file src="..\Our.Umbraco.Hider.Core\bin\Release\**\Our.Umbraco.Hider.Core.dll" target="lib\net472" />
 		<file src="..\Our.Umbraco.Hider.Core\Config\**" target="content\Config" />
 		<file src="App_Plugins\UmbracoHider\**" target="content\App_Plugins\UmbracoHider" />
 	</files>
